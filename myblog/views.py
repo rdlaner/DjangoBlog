@@ -1,7 +1,33 @@
+from django.contrib.auth.models import User, Group
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
-from django.template import loader
-from myblog.models import Post
+from rest_framework import viewsets
+from myblog.models import Category, Post
+from myblog.serializers import UserSerializer, GroupSerializer, CategorySerializer, PostSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """ API endpoint that allows users to be viewed or edited. """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """ API endpoint that allows gropus to be viewed or edited. """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    """ API endpoint that allows categories to be viewed or edited. """
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    """ API endponit that allows posts to be viewed or edited. """
+    queryset = Post.objects.all().order_by("-modified_date")
+    serializer_class = PostSerializer
 
 
 def stub_view(request, *args, **kwargs):
